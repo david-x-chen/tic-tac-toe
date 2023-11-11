@@ -41,10 +41,16 @@ steps:
           --platform linux/amd64 \
           --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) \
           -t $(imageName):v$(prereleaseVersionNumber) -t $(imageName):latest .
-        colima stop
 
   - task: Docker@2
     inputs:
       containerRegistry: '$(dockerId)'
       repository: '$(dockerRepo)'
       command: 'push'
+      arguments: '-t $(imageName):v$(prereleaseVersionNumber) -t $(imageName):latest'
+
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        colima stop
