@@ -43,4 +43,5 @@ steps:
           --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) \
           -t $(imageName):v$(prereleaseVersionNumber) -t $(imageName):latest \
           --push .
+        docker logout
         colima stop
