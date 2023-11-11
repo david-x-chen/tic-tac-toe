@@ -33,9 +33,7 @@ if (!string.IsNullOrWhiteSpace(dnsNameKeyVault))
 }
 
 var keyConfigName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production" ? "" : "-dev";
-Log.Information(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 var sqlConnStr = builder.Configuration[$"mssqlorleans{keyConfigName}"];
-Log.Information(sqlConnStr);
 
 builder.Host.UseOrleans((ctx, siloBuilder) =>
 {
