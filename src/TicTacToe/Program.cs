@@ -47,7 +47,7 @@ builder.WebHost.ConfigureKestrel((ctx, kestrelOptions) =>
 {
     // To avoid port conflicts, each Web server must listen on a different port.
     var instanceId = ctx.Configuration.GetValue<int>("InstanceId");
-    kestrelOptions.ListenLocalhost(8080 + instanceId);
+    kestrelOptions.ListenAnyIP(8080 + instanceId);
 });
 
 builder.Services.AddControllersWithViews();
