@@ -14,7 +14,7 @@ RUN dotnet restore
 WORKDIR /app/src/TicTacToe
 
 RUN echo ${APP_VER}
-RUN dotnet publish -o /publish -c Release -f $NET_VER -r debian.10-x64 /p:Version=$APP_VER /p:InformationalVersion=$APP_VER
+RUN dotnet publish -o /publish -c Release -f $NET_VER -r debian.10-x64 --no-self-contained /p:Version=$APP_VER /p:InformationalVersion=$APP_VER
 
 ### STAGE 2: Runtime ###
 FROM mcr.microsoft.com/dotnet/runtime:latest

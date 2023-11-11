@@ -9,6 +9,7 @@ pr:
 variables:
   dotnetVersion: net7.0
   dockerId: davidxchen
+  dockerRepo: tictactoe
   imageName: davidxchen/tictactoe
 
 steps:
@@ -39,6 +40,11 @@ steps:
         docker buildx build -f $(Build.SourcesDirectory)/Dockerfile \
           --platform linux/amd64 \
           --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) \
-          -t $(imageName):v$(prereleaseVersionNumber) -t $(imageName):latest \
-          --push .
+          -t $(imageName):v$(prereleaseVersionNumber) -t $(imageName):latest .
         colima stop
+
+  - task: Docker@2
+    inputs:
+      containerRegistry: '$(dockerId)'
+      repository: '$(dockerRepo)'
+      command: 'push'
