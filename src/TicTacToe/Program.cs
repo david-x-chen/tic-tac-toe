@@ -1,5 +1,13 @@
 
 using Orleans.Configuration;
+using Serilog;
+using Serilog.Events;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder();
 
@@ -7,6 +15,12 @@ builder.Configuration
     .AddJsonFile("appsettings.json", true, true)
     .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true)
     .AddEnvironmentVariables();
+
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext()
+    .WriteTo.Console());
 
 var config = builder.Configuration.GetSection("AzureKayVault");
 var dnsNameKeyVault = config["DNSNameKeyVault"];
@@ -19,9 +33,9 @@ if (!string.IsNullOrWhiteSpace(dnsNameKeyVault))
 }
 
 var keyConfigName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production" ? "" : "-dev";
-Console.WriteLine(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+Log.Information(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 var sqlConnStr = builder.Configuration[$"mssqlorleans{keyConfigName}"];
-Console.WriteLine(sqlConnStr);
+Log.Information(sqlConnStr);
 
 builder.Host.UseOrleans((ctx, siloBuilder) =>
 {
