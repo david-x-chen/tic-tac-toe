@@ -6,6 +6,8 @@ namespace TicTacToe.Controllers;
 public class ViewModel 
 {
     public string GameId { get; set; } = null!;
+
+    public string AssmVersion { get; set; }
 }
 
 public class HomeController : Controller
@@ -15,9 +17,11 @@ public class HomeController : Controller
 
     public IActionResult Index(Guid? id)
     {
+        var version = ThisAssembly.AssemblyFileVersion;
         var vm = new ViewModel
         {
-            GameId = id.HasValue ? id.Value.ToString() : ""
+            GameId = id.HasValue ? id.Value.ToString() : "",
+            AssmVersion = version
         };
 
         return View("Views/Index.cshtml", vm);
