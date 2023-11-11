@@ -7,7 +7,7 @@ public class ViewModel
 {
     public string GameId { get; set; } = null!;
 
-    public string AssmVersion { get; set; }
+    public string AssmVersion { get; set; } = null!;
 }
 
 public class HomeController : Controller
