@@ -13,7 +13,6 @@ var builder = WebApplication.CreateBuilder();
 
 builder.Configuration
     .AddJsonFile("appsettings.json", true, true)
-    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true)
     .AddEnvironmentVariables();
 
 builder.Host.UseSerilog((context, services, configuration) => configuration
@@ -22,14 +21,13 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .Enrich.FromLogContext()
     .WriteTo.Console());
 
-var config = builder.Configuration.GetSection("AzureKayVault");
-var dnsNameKeyVault = config["DNSNameKeyVault"];
+var kvUrl = builder.Configuration["AzureKeyVault:Url"];
 
-if (!string.IsNullOrWhiteSpace(dnsNameKeyVault))
+if (!string.IsNullOrWhiteSpace(kvUrl))
 {
-    builder.Configuration.AddAzureKeyVault($"{dnsNameKeyVault}",
-        config["AADAppRegistrationAppId"],
-        config["AADAppRegistrationAppSecret"]);
+    builder.Configuration.AddAzureKeyVault($"{kvUrl}",
+        builder.Configuration["AzureKeyVault:AppId"],
+        builder.Configuration["AzureKeyVault:AppSecret"]);
 }
 
 var keyConfigName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production" ? "" : "-dev";
