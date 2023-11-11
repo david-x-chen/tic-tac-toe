@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using TicTacToe.Grains;
 
@@ -6,6 +8,8 @@ namespace TicTacToe.Controllers;
 public class ViewModel 
 {
     public string GameId { get; set; } = null!;
+
+    public string AssmVersion { get; set; } = null!;
 }
 
 public class HomeController : Controller
@@ -15,9 +19,13 @@ public class HomeController : Controller
 
     public IActionResult Index(Guid? id)
     {
+        var assembly = Assembly.GetExecutingAssembly();
+        var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+        var version = fvi.FileVersion;
         var vm = new ViewModel
         {
-            GameId = id.HasValue ? id.Value.ToString() : ""
+            GameId = id.HasValue ? id.Value.ToString() : "",
+            AssmVersion = version
         };
 
         return View("Views/Index.cshtml", vm);

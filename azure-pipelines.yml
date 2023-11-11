@@ -1,0 +1,53 @@
+pool:
+  name: Mac-Agent
+
+trigger:
+  - master
+pr:
+  - master
+
+variables:
+  dotnetVersion: net7.0
+  dockerId: davidxchen
+  dockerRepo: tictactoe
+  imageName: davidxchen/tictactoe
+
+steps:
+  - checkout: self
+    fetchDepth: 0
+
+  - task: CmdLine@2
+    inputs:
+      script: 'nbgv cloud'
+
+  - powershell: |
+      $version = nbgv get-version -f json | ConvertFrom-Json
+      
+      Write-Host $version.SemVer2
+      Write-Host $version.NuGetPackageVersion
+      
+      [string] $SemVer2= $version.SemVer2
+      Write-Host "Setting the version of the build to '$SemVer2'."
+      Write-Host "##vso[task.setvariable variable=prereleaseVersionNumber]$SemVer2"
+
+    displayName: 'PowerShell Script'
+
+  - task: DownloadSecureFile@1
+    name: productionSettings
+    inputs:
+      secureFile: 'appsettings.Production.json'
+
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        cp $(productionSettings.secureFilePath) $(Build.SourcesDirectory)/src/TicTacToe/
+        colima start
+        docker login -u $(dockerId) -p $(docker-secret)
+        docker buildx build --file $(Build.SourcesDirectory)/Dockerfile \
+          --platform linux/amd64 \
+          --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) \
+          -t $(imageName):v$(prereleaseVersionNumber) -t $(imageName):latest \
+          --push .
+        docker logout
+        colima stop
