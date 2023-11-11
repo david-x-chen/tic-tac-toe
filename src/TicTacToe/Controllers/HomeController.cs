@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using TicTacToe.Grains;
 
@@ -17,7 +19,9 @@ public class HomeController : Controller
 
     public IActionResult Index(Guid? id)
     {
-        var version = ThisAssembly.AssemblyFileVersion;
+        var assembly = Assembly.GetExecutingAssembly();
+        var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+        var version = fvi.FileVersion;
         var vm = new ViewModel
         {
             GameId = id.HasValue ? id.Value.ToString() : "",
