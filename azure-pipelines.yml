@@ -1,5 +1,5 @@
 pool:
-  vmImage: ubuntu-latest
+  name: Mac-Agent
 
 trigger:
   - master
