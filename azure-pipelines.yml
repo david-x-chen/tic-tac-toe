@@ -36,5 +36,9 @@ steps:
       targetType: 'inline'
       script: |
         colima start
-        docker buildx build -f $(Build.SourcesDirectory)/Dockerfile --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) -t $(imageName):$(prereleaseVersionNumber) -t $(imageName):latest --push
+        docker buildx build -f $(Build.SourcesDirectory)/Dockerfile \
+          --platform linux/arm64,linux/amd64 \
+          --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) \
+          -t $(imageName):v$(prereleaseVersionNumber) -t $(imageName):latest \
+          --push
         colima stop
