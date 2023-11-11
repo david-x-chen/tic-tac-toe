@@ -37,7 +37,7 @@ steps:
       script: |
         colima start
         docker buildx build -f $(Build.SourcesDirectory)/Dockerfile \
-          --platform linux/arm64,linux/amd64 \
+          --platform linux/amd64 \
           --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) \
           -t $(imageName):v$(prereleaseVersionNumber) -t $(imageName):latest \
           --push .
