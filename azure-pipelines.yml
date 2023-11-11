@@ -9,7 +9,7 @@ pr:
 variables:
   dotnetVersion: net7.0
   dockerId: davidxchen
-  imageName: tictactoe
+  imageName: davidxchen/tictactoe
 
 steps:
   - checkout: self
@@ -36,5 +36,5 @@ steps:
       targetType: 'inline'
       script: |
         colima start
-        docker buildx build -f $(Build.SourcesDirectory)/Dockerfile --build-arg APP_VER=$(prereleaseVersionNumber) NET_VER=$(dotnetVersion) -t $(prereleaseVersionNumber) -t latest
+        docker buildx build -f $(Build.SourcesDirectory)/Dockerfile --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) -t $(imageName):$(prereleaseVersionNumber) -t $(imageName):latest --push
         colima stop
