@@ -37,6 +37,17 @@ steps:
       targetType: 'inline'
       script: |
         colima start
+
+  - task: Docker@2
+    inputs:
+      containerRegistry: '$(dockerId)'
+      command: 'login'
+
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        colima start
         docker buildx build -f $(Build.SourcesDirectory)/Dockerfile \
           --platform linux/amd64 \
           --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) \
