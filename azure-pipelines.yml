@@ -31,12 +31,8 @@ steps:
 
     displayName: 'PowerShell Script'
 
-  - task: Docker@2
-    displayName: Build an image
+  - task: Bash@3
     inputs:
-      command: build
-      dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-      tags: |
-        $(prereleaseVersionNumber)
-        latest
-      arguments: '--build-arg APP_VER=$(prereleaseVersionNumber) NET_VER=$(dotnetVersion)'
+      targetType: 'inline'
+      script: |
+        docker buildx build -f $(Build.SourcesDirectory)/Dockerfile --build-arg APP_VER=$(prereleaseVersionNumber) NET_VER=$(dotnetVersion) -t $(prereleaseVersionNumber) -t latest
