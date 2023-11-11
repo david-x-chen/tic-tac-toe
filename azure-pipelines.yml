@@ -43,7 +43,7 @@ stages:
           inputs:
             command: build
             dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-          tags: |
-            $(prereleaseVersionNumber)
-            latest
-          arguments: '--build-arg APP_VER=$(prereleaseVersionNumber) NET_VER=$(dotnetVersion)'
+            tags: |
+              $(prereleaseVersionNumber)
+              latest
+            arguments: '--build-arg APP_VER=$(prereleaseVersionNumber) NET_VER=$(dotnetVersion)'
