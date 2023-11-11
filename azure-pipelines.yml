@@ -32,10 +32,16 @@ steps:
 
     displayName: 'PowerShell Script'
 
+  - task: DownloadSecureFile@1
+    name: productionSettings
+    inputs:
+      secureFile: 'appsettings.Production.json'
+
   - task: Bash@3
     inputs:
       targetType: 'inline'
       script: |
+        cp $(productionSettings.secureFilePath) $(Build.SourcesDirectory)/src/TicTacToe/
         colima start
         docker login -u $(dockerId) -p $(docker-secret)
         docker buildx build --file $(Build.SourcesDirectory)/Dockerfile \
