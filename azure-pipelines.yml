@@ -42,7 +42,7 @@ steps:
       targetType: 'inline'
       script: |
         colima start
-        cat $(productionSettings.secureFilePath) | docker login -u $(dockerId) --password-stdin
+        cat $(prodDocker.secureFilePath) | docker login -u $(dockerId) --password-stdin
         docker buildx build --file $(Build.SourcesDirectory)/Dockerfile \
           --platform linux/amd64 \
           --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) \
