@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		Dockerfile = Dockerfile
 		azure-pipelines.yml = azure-pipelines.yml
 		version.json = version.json
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Global

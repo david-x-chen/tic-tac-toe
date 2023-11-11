@@ -24,6 +24,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:latest
 WORKDIR /app
 COPY --from=build-env /publish .
 
-EXPOSE 5000 5001
+EXPOSE 8080 11111
 
 ENTRYPOINT ["dotnet", "TicTacToe.dll"]
