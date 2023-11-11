@@ -40,5 +40,5 @@ steps:
           --platform linux/arm64,linux/amd64 \
           --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) \
           -t $(imageName):v$(prereleaseVersionNumber) -t $(imageName):latest \
-          --push
+          --push .
         colima stop
