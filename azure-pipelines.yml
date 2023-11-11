@@ -8,21 +8,12 @@ pr:
 
 variables:
   dotnetVersion: net7.0
-  dotnetSDKVer: 7.x
   dockerId: davidxchen
   imageName: tictactoe
 
 steps:
   - checkout: self
     fetchDepth: 0
-
-  - task: UseDotNet@2
-    displayName: 'Use .NET Core sdk $(dotnetSDKVer)'
-    inputs:
-      packageType: sdk
-      version: $(dotnetSDKVer)
-      installationPath: $(Agent.ToolsDirectory)/dotnet
-      includePreviewVersions: true
 
   - task: CmdLine@2
     inputs:
