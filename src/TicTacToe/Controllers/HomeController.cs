@@ -1,8 +1,3 @@
-using System.Diagnostics;
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
-using TicTacToe.Grains;
-
 namespace TicTacToe.Controllers;
 
 public class ViewModel 
@@ -12,30 +7,18 @@ public class ViewModel
     public string AssmVersion { get; set; } = null!;
 }
 
-public class HomeController : Controller
+public class HomeController(IGrainFactory grainFactory) : Controller
 {
-    private readonly IGrainFactory _grainFactory;
-    public HomeController(IGrainFactory grainFactory) => _grainFactory = grainFactory;
-
-    public IActionResult Index(Guid? id)
-    {
-        var assembly = Assembly.GetExecutingAssembly();
-        var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-        var version = fvi.FileVersion;
-        var vm = new ViewModel
-        {
-            GameId = id.HasValue ? id.Value.ToString() : "",
-            AssmVersion = version
-        };
-
-        return View("Views/Index.cshtml", vm);
-    }
-
     public async Task<IActionResult> Join(Guid id)
     {
         var guid = this.GetGuid();
-        var player = _grainFactory.GetGrain<IPlayerGrain>(guid);
+        if (guid == Guid.Empty)
+        {
+            return BadRequest("Wrong player id");
+        }
+
+        var player = grainFactory.GetGrain<IPlayerGrain>(guid);
         await player.JoinGame(id);
-        return RedirectToAction("Index", id);
+        return Ok(id);
     }
 }

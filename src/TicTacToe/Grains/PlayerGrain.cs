@@ -1,6 +1,7 @@
 namespace TicTacToe.Grains;
 
-public class PlayerGrain : Grain, IPlayerGrain
+public class PlayerGrain(IMemoryCache cache)
+    : Grain, IPlayerGrain
 {
     private List<Guid> _activeGames = new();
     private List<Guid> _pastGames = new();
@@ -11,7 +12,7 @@ public class PlayerGrain : Grain, IPlayerGrain
 
     private string _username = null!;
 
-    public override Task OnActivateAsync(CancellationToken token)
+    public override Task OnActivateAsync(CancellationToken cancellationToken)
     {
         _activeGames = new List<Guid>();
         _pastGames = new List<Guid>();
@@ -20,7 +21,7 @@ public class PlayerGrain : Grain, IPlayerGrain
         _loses = 0;
         _gamesStarted = 0;
 
-        return base.OnActivateAsync(token);
+        return base.OnActivateAsync(cancellationToken);
     }
 
     public async Task<PairingSummary[]> GetAvailableGames()
@@ -32,6 +33,12 @@ public class PlayerGrain : Grain, IPlayerGrain
     // create a new game, and add oursleves to that game
     public async Task<Guid> CreateGame()
     {
+        return await CreateGame(_username);
+    }
+
+    // create a new game, and add oursleves to that game
+    public async Task<Guid> CreateGame(string username)
+    {
         _gamesStarted++;
 
         var gameId = Guid.NewGuid();
@@ -41,11 +48,15 @@ public class PlayerGrain : Grain, IPlayerGrain
         var playerId = this.GetPrimaryKey();  // our player id
         await gameGrain.AddPlayerToGame(playerId);
         _activeGames.Add(gameId);
-        var name = $"{_username}'s {AddOrdinalSuffix(_gamesStarted.ToString())} game";
+        var name = $"{username}'s {AddOrdinalSuffix(_gamesStarted.ToString())} game";
         await gameGrain.SetName(name);
 
         var pairingGrain = GrainFactory.GetGrain<IPairingGrain>(0);
-        await pairingGrain.AddGame(gameId, name);
+        await pairingGrain.AddGame(gameId, new PlayerInfo
+        {
+            Id = playerId,
+            Name = name
+        });
 
         return gameId;
     }
@@ -95,9 +106,9 @@ public class PlayerGrain : Grain, IPlayerGrain
         return tasks.Select(x => x.Result).ToList();
     }
 
-    public Task SetUsername(string name)
+    public Task SetUsername(string username)
     {
-        _username = name;
+        _username = username;
         return Task.CompletedTask;
     }
 

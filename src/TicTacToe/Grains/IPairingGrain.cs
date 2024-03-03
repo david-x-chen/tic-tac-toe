@@ -2,7 +2,7 @@ namespace TicTacToe.Grains;
 
 public interface IPairingGrain : IGrainWithIntegerKey
 {
-    Task AddGame(Guid gameId, string name);
+    Task AddGame(Guid gameId, PlayerInfo player);
 
     Task RemoveGame(Guid gameId);
 
@@ -14,5 +14,5 @@ public interface IPairingGrain : IGrainWithIntegerKey
 public class PairingSummary
 {
     [Id(0)] public Guid GameId { get; set; }
-    [Id(1)] public string? Name { get; set; }
+    [Id(1)] public PlayerInfo? Player { get; set; }
 }

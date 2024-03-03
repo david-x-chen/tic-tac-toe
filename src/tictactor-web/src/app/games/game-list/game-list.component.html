@@ -1,0 +1,120 @@
+<div>
+  <h3>Your Games</h3>
+  <ul style="margin-bottom:25px">
+    <li *ngFor="let c of currentGames">
+      <h4>
+        {{ c.Name }}
+      </h4>
+      <div *ngIf="c.State === 0">
+        <strong>Waiting for another player</strong>
+        <br/>
+        <button type="button"
+                class="btn btn-outline-info"
+                (click)="showInvite(c.GameId, inviteContent)">
+          Invite a friend
+        </button>
+      </div>
+      <div *ngIf="c.State !== 0">
+        <button type="button"
+                (click)="play(c.GameId)"
+                class="btn btn-outline-success">
+          Play
+        </button>
+        <div *ngIf="c.YourMove">
+            <strong class="label text-warning">Your Move</strong>
+        </div>
+        <div>
+          Playing against <strong *ngFor="let u of c.Usernames">{{ u }}</strong><br/>
+          <strong>{{ c.NumMoves }}</strong> moves made
+        </div>
+      </div>
+
+    </li>
+    <li *ngIf="currentGames.length === 0">
+      <i>No games available</i>
+    </li>
+
+  </ul>
+
+  <h3>Available Games</h3>
+  <ul style="margin-bottom:25px">
+    <li *ngFor="let a of availableGames">
+      <h4>
+        {{ a.Player.Name }}
+      </h4>
+      <strong>Waiting for another player</strong><br/>
+      <button class="btn btn-info"
+              type="button"
+              (click)="joinThisGame(a.GameId)">
+        Join
+      </button>
+    </li>
+    <li *ngIf="availableGames.length === 0">
+      <i>No games available</i>
+    </li>
+
+  </ul>
+
+  <button id="startNewBtn"
+          type="button"
+          class="btn btn-primary"
+          (click)="createGame()">
+    Start a new Game
+  </button>
+  <button id="joinBtn"
+          type="button"
+          class="btn btn-success"
+          (click)="showJoinDialog(joinGameContent)">
+    Join a Game
+  </button>
+</div>
+
+<ng-template #joinGameContent id="join-game-modal" let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Join a game</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p>
+      <label for="join-game-input">Game Id</label>
+      <input type="text"
+             class="form-control"
+             id="join-game-input"
+             placeholder="Enter game id"
+             #gameId
+             required>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button"
+            class="btn btn-default"
+            data-dismiss="modal"
+            (click)="modal.dismiss()">Cancel
+    </button>
+    <button type="button"
+            class="btn btn-success"
+            id="joinConfirmButton"
+            (click)="modal.close(gameId.value)">Join
+    </button>
+  </div>
+</ng-template><!-- /.modal -->
+
+<ng-template #inviteContent id="invite-game-modal" let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Invite a friend to a game</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p>
+      <label for="invite-game-id">Send this game id to a friend</label>
+      <input type="text" class="form-control" id="invite-game-id" [value]="gameId" disabled/>
+      <label for="invite-game-link">Or given them this link</label>
+      <input type="text" class="form-control" id="invite-game-link" [value]="inviteLink" disabled/>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success"
+            (click)="modal.close()">OK
+    </button>
+  </div>
+</ng-template><!-- /.modal -->

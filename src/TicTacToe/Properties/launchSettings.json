@@ -19,10 +19,8 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_URLS":"http://localhost:8080/"
-      },
-      "applicationUrl": "http://localhost:8080"
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }

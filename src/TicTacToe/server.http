@@ -1,0 +1,6 @@
+﻿@server_HostAddress = http://localhost:8080/api/
+
+GET {{server_HostAddress}}/common/version/
+Accept: application/json
+
+###

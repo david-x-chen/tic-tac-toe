@@ -1,5 +1,4 @@
-using System.Runtime.Caching;
-using Orleans.Concurrency;
+using MemoryCache = System.Runtime.Caching.MemoryCache;
 
 namespace TicTacToe.Grains;
 
@@ -8,9 +7,9 @@ public class PairingGrain : Grain, IPairingGrain
 {
     private readonly MemoryCache _cache = new("pairing");
 
-    public Task AddGame(Guid gameId, string name)
+    public Task AddGame(Guid gameId, PlayerInfo player)
     {
-        _cache.Add(gameId.ToString(), name, new DateTimeOffset(DateTime.UtcNow).AddHours(1));
+        _cache.Add(gameId.ToString(), player, new DateTimeOffset(DateTime.UtcNow).AddHours(1));
         return Task.CompletedTask;
     }
 
@@ -20,6 +19,9 @@ public class PairingGrain : Grain, IPairingGrain
         return Task.CompletedTask;
     }
 
-    public Task<PairingSummary[]> GetGames() => Task.FromResult(_cache.Select(x => new PairingSummary { GameId = Guid.Parse(x.Key), Name = x.Value as string }).ToArray());
+    public Task<PairingSummary[]> GetGames() =>
+        Task.FromResult(_cache.Select(x =>
+            new PairingSummary { GameId = Guid.Parse(x.Key), Player = x.Value as PlayerInfo })
+            .ToArray());
 
 }
