@@ -1,0 +1,3 @@
+<app-game-list *ngIf="!currentGame.GameId"></app-game-list>
+
+<app-game-board *ngIf="currentGame.GameId" [gameId]="currentGame.GameId"></app-game-board>

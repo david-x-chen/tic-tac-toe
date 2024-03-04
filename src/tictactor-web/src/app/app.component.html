@@ -1,0 +1,50 @@
+﻿<div class="container">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Tic-Tac-Toe</a>
+      <small class="text-secondary-emphasis">{{ fileVersion }}</small>
+      <button class="navbar-toggler" type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li></li>
+        </ul>
+      </div>
+      <span class="d-flex text-secondary-emphasis h6" *ngIf="player.Name != ''">Your name: {{ player.Name }}</span>
+    </div>
+  </nav>
+
+  <div class="container px-4">
+    <div class="row align-items-start">
+      <div class="col-12">
+        <app-home></app-home>
+      </div>
+    </div>
+  </div>
+  <footer class="py-5">
+    <div class="row py-3 my-4 border-top">
+      <div class="col-md-10 col-md-2 mb-3">
+        <h6 class="text-muted">Notes:</h6>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2 text-muted">
+            <p class="mb-3 mb-md-0 text-muted">The site is modified from one of Orleans examples - <a
+              href="https://github.com/dotnet/samples/tree/main/orleans/TicTacToe" target="_blank">TicTacToe</a></p>
+          </li>
+          <li class="nav-item mb-2 text-muted">
+            The generated player id is moved from cookie to local storage.
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-2 align-items-baseline">
+        <span class=" text-muted">Total Online Players: <strong>{{ onlinePlayers }}</strong></span>
+      </div>
+    </div>
+  </footer>
+</div>
+

@@ -1,70 +1,112 @@
-using Microsoft.AspNetCore.Mvc;
-using TicTacToe.Grains;
-
 namespace TicTacToe.Controllers;
 
-public class GameController : Controller
+[Route("api/[controller]")]
+[ApiController]
+[EnableRateLimiting("token")]
+public class GameController(
+    IGrainFactory grainFactory,
+    IGameService gameService)
+    : Controller
 {
-    private readonly IGrainFactory _grainFactory;
-
-    public GameController(IGrainFactory grainFactory) => _grainFactory = grainFactory;
-
-    public async Task<IActionResult> Index()
+    [HttpGet("get-games")]
+    public async Task<IActionResult> GetGames()
     {
         var guid = this.GetGuid();
-        var player = _grainFactory.GetGrain<IPlayerGrain>(guid);
-        var gamesTask = player.GetGameSummaries();
-        var availableTask = player.GetAvailableGames();
-        await Task.WhenAll(gamesTask, availableTask);
+        if (guid == Guid.Empty)
+        {
+            return BadRequest("Wrong player id");
+        }
 
-        return Json(new object[] { gamesTask.Result, availableTask.Result });
+        return Json(await gameService.GetGames(guid));
     }
 
-    public async Task<IActionResult> CreateGame()
+    [HttpPost("create-game")]
+    public async Task<IActionResult> CreateGame([FromBody] PlayerInfo user)
     {
-        var guid = this.GetGuid();
-        var player = _grainFactory.GetGrain<IPlayerGrain>(guid);
-        var gameIdTask = await player.CreateGame();
+        var playerId = this.GetGuid();
+        if (playerId == Guid.Empty)
+        {
+            return BadRequest("Wrong player id");
+        }
+
+        var player = grainFactory.GetGrain<IPlayerGrain>(playerId);
+        var gameIdTask = await player.CreateGame(user.Name);
+
+        await gameService.SyncGame(playerId);
+
         return Json(new { GameId = gameIdTask });
     }
 
+    [HttpPost("join-game/{id:guid}")]
     public async Task<IActionResult> Join(Guid id)
     {
-        var player = _grainFactory.GetGrain<IPlayerGrain>(this.GetGuid());
+        var playerId = this.GetGuid();
+        if (playerId == Guid.Empty)
+        {
+            return BadRequest("Wrong player id");
+        }
+
+        var player = grainFactory.GetGrain<IPlayerGrain>(playerId);
         var state = await player.JoinGame(id);
+
+        await gameService.SyncGame(playerId);
+
         return Json(new { GameState = state });
     }
 
+    [HttpGet("get-moves/{id:guid}")]
     public async Task<IActionResult> GetMoves(Guid id)
     {
-        var game = _grainFactory.GetGrain<IGameGrain>(id);
-        var moves = await game.GetMoves();
-        var summary = await game.GetSummary(this.GetGuid());
-        return Json(new { moves, summary });
+        var playerId = this.GetGuid();
+        if (playerId == Guid.Empty)
+        {
+            return BadRequest("Wrong player id");
+        }
+
+        var moves = await gameService.GetMoves(playerId, id);
+        await gameService.SyncGame(playerId);
+
+        return Json(moves);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> MakeMove(Guid id, int x, int y)
+    [HttpPost("make-move/{id:guid}")]
+    public async Task<IActionResult> MakeMove(Guid id, [FromQuery]int x, [FromQuery]int y)
     {
-        var game = _grainFactory.GetGrain<IGameGrain>(id);
-        var move = new GameMove { PlayerId = this.GetGuid(), X = x, Y = y };
-        var state = await game.MakeMove(move);
+        var playerId = this.GetGuid();
+        if (playerId == Guid.Empty)
+        {
+            return BadRequest("Wrong player id");
+        }
+
+        var move = new GameMove { PlayerId = playerId, X = x, Y = y };
+        var state = gameService.MakeMove(id, move);
+        await gameService.SyncGame(playerId);
+
         return Json(state);
     }
 
+    [HttpGet("query-game")]
     public async Task<IActionResult> QueryGame(Guid id)
     {
-        var game = _grainFactory.GetGrain<IGameGrain>(id);
+        var game = grainFactory.GetGrain<IGameGrain>(id);
         var state = await game.GetState();
         return Json(state);
-
     }
 
-    [HttpPost]
-    public async Task<IActionResult> SetUser(string id)
+    [HttpPost("set-player")]
+    public async Task<IActionResult> SetUser([FromBody] PlayerInfo user)
     {
-        var player = _grainFactory.GetGrain<IPlayerGrain>(this.GetGuid());
-        await player.SetUsername(id);
+        var playerId = this.GetGuid();
+        if (playerId == Guid.Empty)
+        {
+            return BadRequest("Wrong player id");
+        }
+
+        var player = grainFactory.GetGrain<IPlayerGrain>(playerId);
+        await player.SetUsername(user.Name);
+
+        await gameService.SyncGame(playerId);
+
         return Json(new { });
     }
 }

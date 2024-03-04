@@ -1,0 +1,26 @@
+
+<app-games></app-games>
+
+<ng-template #nameModalContent let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Hi! Please enter your name</h4>
+  </div>
+  <div class="modal-body">
+    <p>
+      <label for="enter-name-input">Your name</label>
+      <input type="text"
+             class="form-control"
+             id="enter-name-input"
+             placeholder="Enter your name"
+             #userName
+             required
+      />
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button"
+            class="btn btn-primary"
+            id="enterNameOk"
+            (click)="c(userName.value)">OK</button>
+  </div>
+</ng-template><!-- /.modal -->

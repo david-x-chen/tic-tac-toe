@@ -1,0 +1,70 @@
+.css-grid {
+  padding: 1rem;
+  position: relative;
+  margin: 0 -1.5rem 1rem;
+  border: solid var(--bs-border-color);
+  border-width: 1px 0
+}
+
+.css-grid-row [class^="col"],.css-grid-cols [class^="col"]>*,.css-grid-cssgrid [class*="grid"]>* {
+  height: 3rem;
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  background-color: rgba(112.520718,44.062154,249.437846, 0.15);
+  border: 1px solid rgba(112.520718,44.062154,249.437846, 0.3);
+}
+
+.grid {
+  display: grid;
+  grid-template-rows: repeat(1, 1fr);
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+.grid .g-col-1 {
+  grid-column: auto/span 1
+}
+
+.grid .g-col-2 {
+  grid-column: auto/span 2
+}
+
+.grid .g-col-3 {
+  grid-column: auto/span 3
+}
+
+.grid .g-col-4 {
+  grid-column: auto/span 4
+}
+
+.grid .g-col-5 {
+  grid-column: auto/span 5
+}
+
+.grid .g-col-6 {
+  grid-column: auto/span 6
+}
+
+.grid .g-col-7 {
+  grid-column: auto/span 7
+}
+
+.grid .g-col-8 {
+  grid-column: auto/span 8
+}
+
+.grid .g-col-9 {
+  grid-column: auto/span 9
+}
+
+.grid .g-col-10 {
+  grid-column: auto/span 10
+}
+
+.grid .g-col-11 {
+  grid-column: auto/span 11
+}
+
+.grid .g-col-12 {
+  grid-column: auto/span 12
+}

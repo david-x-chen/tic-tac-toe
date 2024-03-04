@@ -1,0 +1,37 @@
+<div>
+  <a style="margin-top:8px;margin-bottom:8px" (click)="showGames()">&larr;
+    Back to game list</a>
+  <h3>
+    {{ gameSummary.Name }}
+    <small *ngIf="gameSummary.YourMove"><label class="label text-warning">Your Move</label></small>
+  </h3>
+  <p>You are <strong>{{ gameSummary.GameStarter ? 'O' : 'X' }}</strong></p>
+  <p>Playing against <strong *ngFor="let userName of gameSummary.Usernames">{{ userName }}</strong></p>
+  <p><strong>{{ gameSummary.NumMoves }}</strong> moves made</p><br/>
+  <p *ngIf="winMessage"><strong class="text-success-emphasis">{{ winMessage }}</strong></p>
+  <div class="p-3 m-0 border-0 css-grid m-0 border-0 css-grid-cssgrid">
+    <div class="grid text-center">
+      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x0y0'])">{{!board['x0y0'].State ? '' : board['x0y0'].State}}</div>
+      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x1y0'])">{{!board['x1y0'].State ? '' : board['x1y0'].State}}</div>
+      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x2y0'])">{{!board['x2y0'].State ? '' : board['x2y0'].State}}</div>
+    </div>
+  </div>
+  <div class="p-3 m-0 border-0 css-grid m-0 border-0 css-grid-cssgrid">
+    <div class="grid text-center">
+      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x0y1'])">{{!board['x0y1'].State ? '' : board['x0y1'].State}}</div>
+      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x1y1'])">{{!board['x1y1'].State ? '' : board['x1y1'].State}}</div>
+      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x2y1'])">{{!board['x2y1'].State ? '' : board['x2y1'].State}}</div>
+    </div>
+  </div>
+  <div class="p-3 m-0 border-0 css-grid m-0 border-0 css-grid-cssgrid">
+    <div class="grid text-center">
+      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x0y2'])">{{!board['x0y2'].State ? '' : board['x0y2'].State}}</div>
+      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x1y2'])">{{!board['x1y2'].State ? '' : board['x1y2'].State}}</div>
+      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x2y2'])">{{!board['x2y2'].State ? '' : board['x2y2'].State}}</div>
+    </div>
+  </div>
+</div>
+
+@if (notYourMoveMessage) {
+  <ngb-alert #selfClosingAlert [type]="alertType" (closed)="notYourMoveMessage = ''">{{ notYourMoveMessage }}</ngb-alert>
+}

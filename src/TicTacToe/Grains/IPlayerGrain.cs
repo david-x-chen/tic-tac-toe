@@ -11,6 +11,8 @@ public interface IPlayerGrain : IGrainWithGuidKey
     // create a new game and join it
     Task<Guid> CreateGame();
 
+    Task<Guid> CreateGame(string username);
+
     // join an existing game
     Task<GameState> JoinGame(Guid gameId);
 
