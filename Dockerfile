@@ -18,6 +18,10 @@ WORKDIR /app
 
 RUN dotnet restore
 
+WORKDIR /app/src/tictactor-web
+RUN npm i
+
+WORKDIR /app
 RUN dotnet build
 
 WORKDIR /app/src/TicTacToe
