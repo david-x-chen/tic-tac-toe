@@ -18,6 +18,7 @@
     "TicTacToe": {
       "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "http://localhost:8080;https://localhost:9080",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

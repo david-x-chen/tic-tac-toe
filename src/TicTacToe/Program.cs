@@ -69,8 +69,6 @@ builder.Host.UseOrleans((ctx, siloBuilder) =>
         .ConfigureLogging(loggingBuilder => loggingBuilder.SetMinimumLevel(LogLevel.Warning).AddConsole());
 });
 
-builder.WebHost.ConfigureKestrel(x => x.AddServerHeader = false);
-
 builder.Services.AddTransient<IGameService, GameService>();
 
 builder.Services.AddCors(options =>
