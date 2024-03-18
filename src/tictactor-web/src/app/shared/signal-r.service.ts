@@ -6,7 +6,7 @@ import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {MessagePackHubProtocol} from "@microsoft/signalr-protocol-msgpack";
 import {GameServerParameters, NameStorageKey} from "./game.model";
 import {LocalStorageService} from "ngx-webstorage";
-import { environment } from '../../environments/environment';
+import configure from "../../assets/config/config.json";
 
 // https://stackoverflow.com/questions/68041867/can-you-inject-signalr-in-angular-10-in-a-service-without-calling-the-methods-i
 @Injectable({
@@ -68,7 +68,7 @@ export class SignalRService extends SignalRBaseService {
     }
 
     this._hubConnection = new HubConnectionBuilder()
-      .withUrl(`${environment.apiUrl}/message?playerId=${player.Id}`)
+      .withUrl(`${configure.apiServer.url}/message?playerId=${player.Id}`)
       .configureLogging("Warning")
       .withHubProtocol(new MessagePackHubProtocol())
       .withAutomaticReconnect()
