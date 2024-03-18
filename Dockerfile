@@ -13,11 +13,16 @@ RUN npm -v
 
 COPY src /app/src
 COPY TicTacToe.sln /app/TicTacToe.sln
-#COPY NuGet.config /app/NuGet.config
+COPY entryPoint.sh /app/entryPoint.sh
 WORKDIR /app
 
 RUN dotnet restore
 RUN dotnet build
+
+WORKDIR /app/src/tictactor-web
+
+RUN rm /app/src/tictactor-web/node-modules -rf
+RUN npm install
 
 WORKDIR /app/src/TicTacToe
 
@@ -28,10 +33,13 @@ RUN dotnet publish -o /publish -c Release -r linux-x64 --no-self-contained /p:Ve
 FROM mcr.microsoft.com/dotnet/aspnet:latest
 
 # Set environment variables
+RUN apt-get update
+RUN apt-get install -y gettext-base
 
 WORKDIR /app
 COPY --from=build-env /publish .
+COPY --from=build-env /app/entryPoint.sh .
 
 EXPOSE 8080 9080 11111-11200 30000-30200
 
-ENTRYPOINT ["dotnet", "TicTacToe.dll"]
+ENTRYPOINT ["sh","/app/entryPoint.sh"]
