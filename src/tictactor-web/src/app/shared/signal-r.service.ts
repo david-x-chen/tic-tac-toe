@@ -29,11 +29,11 @@ export class SignalRService extends SignalRBaseService {
 
     this.getJSON().subscribe((data) => {
       this.config.ApiUrl = data.apiServer.url;
-    });
 
-    this._signalEvent = new Subject<any>();
-    this._isInitializing = true;
-    this._initializeSignalR();
+      this._signalEvent = new Subject<any>();
+      this._isInitializing = true;
+      this._initializeSignalR();
+    });
   }
 
   public getJSON(): Observable<any> {
