@@ -6,8 +6,7 @@ import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {MessagePackHubProtocol} from "@microsoft/signalr-protocol-msgpack";
 import {GameServerParameters, NameStorageKey} from "./game.model";
 import {LocalStorageService} from "ngx-webstorage";
-import configure from "../../assets/config/config.json";
-import {HttpClient} from "@angular/common/http";
+import {ConfigurationService} from "./configuration.service";
 
 // https://stackoverflow.com/questions/68041867/can-you-inject-signalr-in-angular-10-in-a-service-without-calling-the-methods-i
 @Injectable({
@@ -17,27 +16,23 @@ export class SignalRService extends SignalRBaseService {
   private _signalEvent: Subject<SignalEvent<any>>;
   private _openConnection: boolean = false;
   private _isInitializing: boolean = false;
-  private _hubConnection!: HubConnection
+  private _hubConnection!: HubConnection;
 
-  config = {
-    ApiUrl: configure.apiServer.url,
-  };
+  private apiUrl: string | undefined;
 
   constructor(private storageService:LocalStorageService,
-              private http: HttpClient) {
+              private configService: ConfigurationService) {
     super();
 
-    this.getJSON().subscribe((data) => {
-      this.config.ApiUrl = data.apiServer.url;
+    this._signalEvent = new Subject<any>();
+    this._isInitializing = true;
 
-      this._signalEvent = new Subject<any>();
-      this._isInitializing = true;
-      this._initializeSignalR();
-    });
-  }
-
-  public getJSON(): Observable<any> {
-    return this.http.get('./assets/config/config.json');
+    this.configService.configData.subscribe(
+      config => {
+        this.apiUrl = config.apiServer_Url;
+        this._initializeSignalR();
+      }
+    );
   }
 
   override getDataStream<TDataShape>(...filterValues: SignalEventType[])
@@ -83,7 +78,7 @@ export class SignalRService extends SignalRBaseService {
     }
 
     this._hubConnection = new HubConnectionBuilder()
-      .withUrl(`${this.config.ApiUrl}/message?playerId=${player.Id}`)
+      .withUrl(`${this.apiUrl}/message?playerId=${player.Id}`)
       .configureLogging("Warning")
       .withHubProtocol(new MessagePackHubProtocol())
       .withAutomaticReconnect()

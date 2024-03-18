@@ -1,6 +1,4 @@
 {
-  "apiServer": {
-    "url": "https://localhost:9080",
-    "version": "v1"
-  }
+  "apiServer_Url": "https://localhost:9080",
+  "version": "v1"
 }

@@ -4,6 +4,7 @@ import {LocalStorageService} from "ngx-webstorage";
 import {Subscription} from "rxjs";
 import {SignalEventType} from "./shared/signal-r.model";
 import {SignalRService} from "./shared/signal-r.service";
+import {ConfigurationService} from "./shared/configuration.service";
 
 @Component({
   selector: 'app-root',
@@ -18,9 +19,12 @@ export class AppComponent implements OnInit, OnDestroy {
   onlinePlayers: number = 0;
 
   constructor(private storageService:LocalStorageService,
-              private signal: SignalRService) {}
+              private signal: SignalRService,
+              private config: ConfigurationService) {}
 
   ngOnInit() {
+    this.config.loadConfiguration();
+
     this.player = this.storageService.retrieve(NameStorageKey);
     if (this.player === null) {
       this.player = { Name : '', Id: '' };
