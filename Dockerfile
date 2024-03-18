@@ -40,6 +40,8 @@ WORKDIR /app
 COPY --from=build-env /publish .
 COPY --from=build-env /app/entryPoint.sh .
 
+RUN chmod +x entryPoint.sh
+
 EXPOSE 8080 9080 11111-11200 30000-30200
 
 ENTRYPOINT ["sh","/app/entryPoint.sh"]
