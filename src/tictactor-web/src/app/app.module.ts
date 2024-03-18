@@ -1,7 +1,6 @@
 import { HttpClientModule, provideHttpClient, withInterceptors} from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GamesComponent } from './games/games.component';
@@ -31,7 +30,7 @@ import { GameListComponent } from './games/game-list/game-list.component';
     FormsModule
   ],
   providers: [
-    provideHttpClient(withInterceptors([appRequestsInterceptor]))
+    provideHttpClient(withInterceptors([appRequestsInterceptor])),
   ],
   bootstrap: [AppComponent]
 })
