@@ -16,8 +16,9 @@ steps:
   - checkout: self
     fetchDepth: 0
 
-  - task: CmdLine@2
+  - task: PowerShell@2
     inputs:
+      targetType: 'inline'
       script: 'nbgv cloud'
 
   - powershell: |
@@ -37,16 +38,16 @@ steps:
     inputs:
       secureFile: 'pass.txt'
 
-  - task: Bash@3
-    inputs:
-      targetType: 'inline'
-      script: |
-        colima start
-        cat $(prodDocker.secureFilePath) | docker login -u $(dockerId) --password-stdin
-        docker buildx build --file $(Build.SourcesDirectory)/Dockerfile \
-          --platform linux/amd64 \
-          --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) \
-          -t $(imageName):v$(prereleaseVersionNumber) -t $(imageName):latest \
-          --push .
-        docker logout
-        colima stop
+#  - task: Bash@3
+#    inputs:
+#      targetType: 'inline'
+#      script: |
+#        #colima start
+#        cat $(prodDocker.secureFilePath) | docker login -u $(dockerId) --password-stdin
+#        docker buildx build --file $(Build.SourcesDirectory)/Dockerfile \
+#          --platform linux/amd64 \
+#          --build-arg APP_VER=$(prereleaseVersionNumber) --build-arg NET_VER=$(dotnetVersion) \
+#          -t $(imageName):v$(prereleaseVersionNumber) -t $(imageName):latest \
+#          --push .
+#        docker logout
+#        colima stop
