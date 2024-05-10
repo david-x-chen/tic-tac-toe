@@ -18,14 +18,10 @@ steps:
 
   - task: CmdLine@2
     inputs:
-      script: 'dotnet tool install --tool-path . nbgv'
-
-  - task: CmdLine@2
-    inputs:
-      script: 'nbgv cloud'
+      script: '/home/david/.dotnet/tools/nbgv cloud'
 
   - powershell: |
-      $version = nbgv get-version -f json | ConvertFrom-Json
+      $version = /home/david/.dotnet/tools/nbgv get-version -f json | ConvertFrom-Json
       
       Write-Host $version.SemVer2
       Write-Host $version.NuGetPackageVersion
