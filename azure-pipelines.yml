@@ -18,6 +18,10 @@ steps:
 
   - task: CmdLine@2
     inputs:
+      script: 'dotnet tool install --tool-path . nbgv'
+
+  - task: CmdLine@2
+    inputs:
       script: 'nbgv cloud'
 
   - powershell: |
