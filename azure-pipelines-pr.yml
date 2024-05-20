@@ -20,3 +20,8 @@ steps:
   - task: CmdLine@2
     inputs:
       script: 'echo $(Build.BuildNumber)'
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'build'
+      projects: '*.sln'
