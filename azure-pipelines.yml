@@ -22,7 +22,7 @@ steps:
 
   - task: CmdLine@2
     inputs:
-      script: 'echo $(Build.BuildVersion)'
+      script: 'echo $(Build.BuildNumber)'
 
   - powershell: |
       $version = /home/david/.dotnet/tools/nbgv get-version -f json | ConvertFrom-Json
