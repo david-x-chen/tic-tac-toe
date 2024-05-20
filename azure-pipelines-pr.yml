@@ -25,16 +25,17 @@ steps:
     inputs:
       versionSpec: '6.x'
 
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: 'build'
-      projects: '**/src/TicTacToe/TicTacToe.csproj'
-  
   - task: NodeTool@0
     inputs:
       versionSpec: '20.x'
   
-  - script: |
-      npm install
-      npm run build
-    workingDirectory: '$(Build.Repository.LocalPath)/src/tictactor-web/'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'restore'
+      feedsToUse: 'select'
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'build'
+      projects: '**/*.sln'
+  
