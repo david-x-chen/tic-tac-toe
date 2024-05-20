@@ -12,10 +12,20 @@ variables:
 steps:
   - checkout: self
     fetchDepth: 0
+  
+  - task: UseDotNet@2
+    inputs:
+      version: 8.0.x
 
   - task: CmdLine@2
     inputs:
       script: '/home/david/.dotnet/tools/nbgv cloud'
+
+  - task: NuGetToolInstaller@1
+
+  - task: NuGetCommand@2
+    inputs:
+      restoreSolution: '**/*.sln'
 
   - task: CmdLine@2
     inputs:
@@ -25,3 +35,12 @@ steps:
     inputs:
       command: 'build'
       projects: '**/src/TicTacToe/TicTacToe.csproj'
+  
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '20.x'
+  
+  - script: |
+      npm install
+      npm run build
+    workingDirectory: '$(Build.Repository.LocalPath)/src/tictactor-web/'
