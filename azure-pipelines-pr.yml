@@ -1,0 +1,22 @@
+pool:
+  name: self-hosted
+
+trigger: none
+
+pr:
+  - master
+
+variables:
+  dotnetVersion: net8.0
+
+steps:
+  - checkout: self
+    fetchDepth: 0
+
+  - task: CmdLine@2
+    inputs:
+      script: '/home/david/.dotnet/tools/nbgv cloud'
+
+  - task: CmdLine@2
+    inputs:
+      script: 'echo $(Build.BuildNumber)'

@@ -3,8 +3,7 @@ pool:
 
 trigger:
   - master
-pr:
-  - master
+pr: none
 
 variables:
   dotnetVersion: net8.0
