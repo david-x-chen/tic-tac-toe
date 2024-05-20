@@ -27,11 +27,8 @@ steps:
 
   - task: NuGetCommand@2
     inputs:
+      command: restore
       restoreSolution: '**/*.sln'
-
-  - task: CmdLine@2
-    inputs:
-      script: 'echo $(Build.BuildNumber)'
 
   - task: DotNetCoreCLI@2
     inputs:
