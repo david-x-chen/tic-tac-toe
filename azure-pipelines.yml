@@ -20,6 +20,10 @@ steps:
     inputs:
       script: '/home/david/.dotnet/tools/nbgv cloud'
 
+  - task: CmdLine@2
+    inputs:
+      script: 'echo $(Build.BuildVersion)'
+
   - powershell: |
       $version = /home/david/.dotnet/tools/nbgv get-version -f json | ConvertFrom-Json
       
