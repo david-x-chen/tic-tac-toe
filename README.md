@@ -28,7 +28,7 @@ The call flow is as follows:
 
 ## Sample prerequisites
 
-This sample is written in C# and targets .NET 7.0. It requires the [.NET 7.0 SDK](https://dotnet.microsoft.com/download/dotnet/7.0) or later.
+This sample is written in C# and targets .NET 8.0. It requires the [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later.
 
 ## Building the sample
 
@@ -58,3 +58,33 @@ dotnet run -- --InstanceId 1
 ```
 
 Since the game uses cookies to identify players, you will need a separate browser session to be able to play against yourself and experience the game.
+
+## Angular
+
+## Azure Key Vault setup
+This sample project is using Azure KeyVault to load necessary database connection information
+
+## Azure ApplicationInsights setup
+
+## Docker Compose Setup
+### container setup
+```yaml
+  tic-tac-toe:
+     image: "[sample name]/tic-tac-toe:latest"
+     container_name: "tic-tac-toe"
+     ports:
+        - "5000:80"
+        - "5100:443"
+     environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+
+      - AzureKeyVault__Url=[azure_key_vault_url]
+      - AzureKeyVault__AppId=[azure_key_app_id]
+      - AzureKeyVault__AppSecret=[azure_key_app_secret]
+      - TicTacToe_Cluster_Id=[cluster_id]
+      - TicTacToe_Cluster_ServiceId=[cluster_service_id]
+      - TicTacToe_Silo_Port=[silo_port]
+      - TicTacToe_Gateway_Port=[gateway_port]
+      - TicTacToe__CORS=[if needed]
+      - API_LINK=[domain_url]
+```
