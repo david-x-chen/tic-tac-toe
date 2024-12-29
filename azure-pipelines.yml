@@ -3,8 +3,7 @@ pool:
 
 trigger:
   - master
-pr:
-  - master
+pr: none
 
 variables:
   dotnetVersion: net8.0
@@ -18,19 +17,22 @@ steps:
 
   - task: CmdLine@2
     inputs:
-      script: 'nbgv cloud'
+      script: '/home/david/.dotnet/tools/nbgv cloud'
 
-  - powershell: |
-      $version = nbgv get-version -f json | ConvertFrom-Json
-      
-      Write-Host $version.SemVer2
-      Write-Host $version.NuGetPackageVersion
-      
-      [string] $SemVer2= $version.SemVer2
-      Write-Host "Setting the version of the build to '$SemVer2'."
-      Write-Host "##vso[task.setvariable variable=prereleaseVersionNumber]$SemVer2"
+  - bash: |
+      echo "##vso[task.setvariable variable=prereleaseVersionNumber;]$(Build.BuildNumber)"
 
-    displayName: 'PowerShell Script'
+  #- powershell: |
+  #    $version = /home/david/.dotnet/tools/nbgv get-version -f json | ConvertFrom-Json
+      
+  #    Write-Host $version.SemVer2
+  #    Write-Host $version.NuGetPackageVersion
+      
+  #    [string] $SemVer2= $version.SemVer2
+  #    Write-Host "Setting the version of the build to '$SemVer2'."
+  #    Write-Host "##vso[task.setvariable variable=prereleaseVersionNumber]$SemVer2"
+
+  #  displayName: 'PowerShell Script'
 
   - task: DownloadSecureFile@1
     name: prodDocker

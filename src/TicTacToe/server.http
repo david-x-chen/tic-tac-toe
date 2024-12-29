@@ -1,6 +1,46 @@
 ﻿@server_HostAddress = http://localhost:8080/api/
+@gameId = 00000000-0000-0000-0000-000000000000
 
+### Get version
 GET {{server_HostAddress}}/common/version/
 Accept: application/json
 
-###
+### Get games for the current player
+GET {{server_HostAddress}}/game/get-games
+Accept: application/json
+
+### Create a new game
+POST {{server_HostAddress}}/game/create-game
+Content-Type: application/json
+
+{
+  "Name": "Player1"
+}
+
+### Join a game
+POST {{server_HostAddress}}/game/join-game/{{gameId}}
+Accept: application/json
+
+### Get moves for a specific game
+GET {{server_HostAddress}}/game/get-moves/{{gameId}}
+Accept: application/json
+
+### Make a move
+POST {{server_HostAddress}}/game/make-move/{{gameId}}?x=0&y=0
+Accept: application/json
+
+### Query game state
+GET {{server_HostAddress}}/game/query-game?id={{gameId}}
+Accept: application/json
+
+### Set player information
+POST {{server_HostAddress}}/game/set-player
+Content-Type: application/json
+
+{
+  "Name": "UpdatedPlayerName"
+}
+
+### Join game (Home Controller)
+POST {{server_HostAddress}}/home/join?id={{gameId}}
+Accept: application/json
