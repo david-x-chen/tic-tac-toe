@@ -178,4 +178,4 @@ app.MapControllers().RequireCors(corsPolicy);
 app.MapHub<MessageHub>("/message");
 app.MapFallbackToFile("/index.html");
 
-app.Run();
+await app.RunAsync();
