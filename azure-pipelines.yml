@@ -6,7 +6,7 @@ trigger:
 pr: none
 
 variables:
-  dotnetVersion: net8.0
+  dotnetVersion: net9.0
   dockerId: davidxchen
   dockerRepo: tictactoe
   imageName: davidxchen/tictactoe

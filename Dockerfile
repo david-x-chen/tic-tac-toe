@@ -1,5 +1,5 @@
 ### STAGE 1: Build DotNet Core ###
-FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy-amd64 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:latest AS build-env
 
 ARG APP_VER
 ARG NET_VER

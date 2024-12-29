@@ -7,7 +7,7 @@ pr:
   - master
 
 variables:
-  dotnetVersion: net8.0
+  dotnetVersion: net9.0
 
 steps:
   - checkout: self
@@ -15,7 +15,7 @@ steps:
   
   - task: UseDotNet@2
     inputs:
-      version: 8.0.x
+      version: 9.0.x
 
   - task: CmdLine@2
     inputs:
