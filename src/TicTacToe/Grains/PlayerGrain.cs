@@ -1,10 +1,10 @@
 namespace TicTacToe.Grains;
 
-public class PlayerGrain(IMemoryCache cache)
+public class PlayerGrain
     : Grain, IPlayerGrain
 {
-    private List<Guid> _activeGames = new();
-    private List<Guid> _pastGames = new();
+    private List<Guid> _activeGames = [];
+    private List<Guid> _pastGames = [];
 
     private int _wins;
     private int _loses;
@@ -14,8 +14,8 @@ public class PlayerGrain(IMemoryCache cache)
 
     public override Task OnActivateAsync(CancellationToken cancellationToken)
     {
-        _activeGames = new List<Guid>();
-        _pastGames = new List<Guid>();
+        _activeGames = [];
+        _pastGames = [];
 
         _wins = 0;
         _loses = 0;
@@ -30,13 +30,13 @@ public class PlayerGrain(IMemoryCache cache)
         return (await grain.GetGames()).Where(x => !_activeGames.Contains(x.GameId)).ToArray();
     }
 
-    // create a new game, and add oursleves to that game
+    // create a new game, and add ourselves to that game
     public async Task<Guid> CreateGame()
     {
         return await CreateGame(_username);
     }
 
-    // create a new game, and add oursleves to that game
+    // create a new game, and add ourselves to that game
     public async Task<Guid> CreateGame(string username)
     {
         _gamesStarted++;
