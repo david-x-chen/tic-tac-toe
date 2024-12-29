@@ -19,7 +19,7 @@ steps:
 
   - task: CmdLine@2
     inputs:
-      script: '/home/david/.dotnet/tools/nbgv cloud'
+      script: 'nbgv cloud'
 
   - task: NuGetToolInstaller@1
     inputs:
