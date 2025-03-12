@@ -47,6 +47,21 @@ export class CurrentGame {
   ) {}
 }
 
+export interface GameInfo {
+  PlayerId: string,
+  AvailableGames: PairingSummary[],
+  Games: GameSummary[]
+}
+
+export interface NewGame {
+  gameId: string
+}
+
+export interface GameMoves {
+  Moves: GameMove[]
+  Summary: GameSummary
+}
+
 export class JoinGameResult {
   constructor(
     public gameState: number

@@ -4,15 +4,14 @@ import {
   GameStorageKey,
   GameSummary,
   JoinGameResult,
-  NameStorageKey,
+  NameStorageKey, NewGame,
   PairingSummary,
   Player
 } from "../shared/game.model";
-import {Subject} from "rxjs";
+import {Subject, Observable} from "rxjs";
 import cryptoRandomString from "crypto-random-string";
 import {HttpClient} from "@angular/common/http";
 import {LocalStorageService, SessionStorageService} from "ngx-webstorage";
-import {SignalEventType} from "../shared/signal-r.model";
 import {SignalRService} from "../shared/signal-r.service";
 
 @Injectable({
@@ -60,11 +59,9 @@ export class GamesService {
     );
   }
 
-  createGame() {
+  createGame():Observable<NewGame> {
     const player = this.storageService.retrieve(NameStorageKey);
-    this.http.post('/api/game/create-game', player).subscribe(
-      () => {}
-    );
+    return this.http.post<NewGame>('/api/game/create-game', player)
   }
 
   joinGame(gameId: string) {

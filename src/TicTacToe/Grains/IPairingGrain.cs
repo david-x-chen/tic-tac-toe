@@ -10,14 +10,14 @@ public interface IPairingGrain : IGrainWithGuidKey
 }
 
 [Immutable]
-[MessagePackObject]
+[MessagePackObject(keyAsPropertyName: true)]
 [GenerateSerializer]
 public class PairingSummary
 {
-    [Key(0)]
+
     [Id(0)]
     public Guid GameId { get; set; }
-    [Key(1)]
+
     [Id(1)]
     public PlayerInfo? Player { get; set; }
 }

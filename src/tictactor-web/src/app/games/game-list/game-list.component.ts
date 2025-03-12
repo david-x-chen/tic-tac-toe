@@ -1,6 +1,13 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {Subscription} from "rxjs";
-import {GameMove, GameServerParameters, GameSummary, NameStorageKey, PairingSummary} from "../../shared/game.model";
+import {
+  GameInfo,
+  GameMove,
+  GameServerParameters,
+  GameSummary,
+  NameStorageKey, NewGame,
+  PairingSummary
+} from "../../shared/game.model";
 import {GamesService} from "../games.service";
 import {LocalStorageService} from "ngx-webstorage";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -35,15 +42,15 @@ export class GameListComponent implements OnInit, OnDestroy{
     this.playerId = player.Id;
 
     this.gameSub = this.signal
-      .getDataStream<[string, GameSummary[], PairingSummary[]]>(SignalEventType.GAME_INFO)
+      .getDataStream<GameInfo>(SignalEventType.GAME_INFO)
       .subscribe(message =>
       {
-        if (this.playerId !== message.data[0]) {
+        if (this.playerId !== message.data.PlayerId) {
           return;
         }
 
-        this.currentGames = message.data[1];
-        this.availableGames = message.data[2];
+        this.currentGames = message.data.Games;
+        this.availableGames = message.data.AvailableGames;
       });
   }
 
@@ -57,7 +64,18 @@ export class GameListComponent implements OnInit, OnDestroy{
   }
 
   createGame() {
-    this.gameService.createGame();
+    this.gameService.createGame().subscribe({
+      next : (data: NewGame)=> {
+        if (data) {
+          const params: GameServerParameters = {
+            PlayerId: this.playerId,
+            GameId: data.gameId,
+            Move: { } as GameMove
+          }
+          this.signal.invokeServerMethod(params, SignalEventType.GAME_INFO).then(()=>{});
+        }
+      }
+    });
   }
 
   play(gameId: string) {
