@@ -67,7 +67,6 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.gameMovesSub = this.signal
       .getDataStream<GameMoves>(SignalEventType.GAME_MOVES)
       .subscribe(message => {
-        console.log(message);
         this.gameMoves = message.data.Moves;
         this.gameSummary = message.data.Summary;
 
