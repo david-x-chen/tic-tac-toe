@@ -1,4 +1,4 @@
-import { HttpClientModule, provideHttpClient, withInterceptors} from '@angular/common/http';
+import { provideHttpClient, withInterceptors, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -12,26 +12,20 @@ import {appRequestsInterceptor} from "./app-requests.interceptor";
 import { GameBoardComponent } from './games/game-board/game-board.component';
 import { GameListComponent } from './games/game-list/game-list.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    GamesComponent,
-    HomeComponent,
-    GameBoardComponent,
-    GameListComponent
-  ],
-  imports: [
-    BrowserModule,
-    NgxWebstorageModule.forRoot(),
-    HttpClientModule,
-    AppRoutingModule,
-    NgbModule,
-    ReactiveFormsModule,
-    FormsModule
-  ],
-  providers: [
-    provideHttpClient(withInterceptors([appRequestsInterceptor])),
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        GamesComponent,
+        HomeComponent,
+        GameBoardComponent,
+        GameListComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        NgxWebstorageModule.forRoot(),
+        AppRoutingModule,
+        NgbModule,
+        ReactiveFormsModule,
+        FormsModule], providers: [
+        provideHttpClient(withInterceptors([appRequestsInterceptor])),
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule { }
