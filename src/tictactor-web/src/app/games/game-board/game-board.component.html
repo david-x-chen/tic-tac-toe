@@ -8,7 +8,7 @@
   <p>You are <strong>{{ gameSummary.GameStarter ? 'O' : 'X' }}</strong></p>
   <p>Playing against <strong *ngFor="let userName of gameSummary.Usernames">{{ userName }}</strong></p>
   <p><strong>{{ gameSummary.NumMoves }}</strong> moves made</p><br/>
-  <p *ngIf="winMessage"><strong class="text-success-emphasis">{{ winMessage }}</strong></p>
+  <p *ngIf="winMessage"><strong class="text-success-emphasis text-success">{{ winMessage }}</strong></p>
   <div class="p-3 m-0 border-0 css-grid m-0 border-0 css-grid-cssgrid">
     <div class="grid text-center">
       <div class="g-col-4" style="cursor: pointer" (click)="move(board['x0y0'])">{{!board['x0y0'].State ? '' : board['x0y0'].State}}</div>

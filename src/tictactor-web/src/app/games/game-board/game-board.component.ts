@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {debounceTime, Subject, Subscription, tap} from "rxjs";
-import {GameMove, GameServerParameters, GameSummary, NameStorageKey, Player} from "../../shared/game.model";
+import {GameMove, GameMoves, GameServerParameters, GameSummary, NameStorageKey, Player} from "../../shared/game.model";
 import {SignalRService} from "../../shared/signal-r.service";
 import {SignalEventType} from "../../shared/signal-r.model";
 import {LocalStorageService} from "ngx-webstorage";
@@ -65,10 +65,11 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     }
 
     this.gameMovesSub = this.signal
-      .getDataStream<[GameMove[], GameSummary]>(SignalEventType.GAME_MOVES)
+      .getDataStream<GameMoves>(SignalEventType.GAME_MOVES)
       .subscribe(message => {
-        this.gameMoves = message.data[0];
-        this.gameSummary = message.data[1];
+        console.log(message);
+        this.gameMoves = message.data.Moves;
+        this.gameSummary = message.data.Summary;
 
         const that = this;
 
