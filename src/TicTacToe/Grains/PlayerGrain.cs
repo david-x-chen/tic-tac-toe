@@ -26,7 +26,7 @@ public class PlayerGrain
 
     public async Task<PairingSummary[]> GetAvailableGames()
     {
-        var grain = GrainFactory.GetGrain<IPairingGrain>(0);
+        var grain = GrainFactory.GetGrain<IPairingGrain>(Guid.Empty);
         return (await grain.GetGames()).Where(x => !_activeGames.Contains(x.GameId)).ToArray();
     }
 
@@ -51,7 +51,7 @@ public class PlayerGrain
         var name = $"{username}'s {AddOrdinalSuffix(_gamesStarted.ToString())} game";
         await gameGrain.SetName(name);
 
-        var pairingGrain = GrainFactory.GetGrain<IPairingGrain>(0);
+        var pairingGrain = GrainFactory.GetGrain<IPairingGrain>(Guid.Empty);
         await pairingGrain.AddGame(gameId, new PlayerInfo
         {
             Id = playerId,
@@ -69,7 +69,7 @@ public class PlayerGrain
         var state = await gameGrain.AddPlayerToGame(this.GetPrimaryKey());
         _activeGames.Add(gameId);
 
-        var pairingGrain = GrainFactory.GetGrain<IPairingGrain>(0);
+        var pairingGrain = GrainFactory.GetGrain<IPairingGrain>(Guid.Empty);
         await pairingGrain.RemoveGame(gameId);
 
         return state;

@@ -1,6 +1,6 @@
 namespace TicTacToe.Grains;
 
-public interface IPairingGrain : IGrainWithIntegerKey
+public interface IPairingGrain : IGrainWithGuidKey
 {
     Task AddGame(Guid gameId, PlayerInfo player);
 
