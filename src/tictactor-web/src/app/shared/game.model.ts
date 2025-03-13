@@ -62,6 +62,13 @@ export interface GameMoves {
   Summary: GameSummary
 }
 
+export interface BoardState {
+  X: number,
+  Y: number,
+  State: string,
+  YourMove: boolean
+}
+
 export class JoinGameResult {
   constructor(
     public gameState: number
