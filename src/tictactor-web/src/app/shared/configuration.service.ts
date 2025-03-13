@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
 import { Configuration } from './configuration.model';
 import {Subject} from "rxjs";
-import * as config from '../../assets/config/config.json';
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +9,16 @@ import * as config from '../../assets/config/config.json';
 export class ConfigurationService {
 
   configData = new Subject<Configuration>();
+  private readonly configPath: string = './assets/config/config.json';
 
-  constructor() {
+  constructor(private readonly http: HttpClient) {
   }
 
   loadConfiguration() {
-    const data:Configuration = config;
-
-    this.configData.next(data);
+    this.http.get<Configuration>(this.configPath).subscribe(
+      data => {
+        this.configData.next(data);
+      }
+    );
   }
 }
