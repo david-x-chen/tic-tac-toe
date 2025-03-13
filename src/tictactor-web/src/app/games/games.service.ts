@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import {
-  CurrentGame, GameMove, GameServerParameters,
+  CurrentGame,
   GameStorageKey,
   GameSummary,
   JoinGameResult,
   NameStorageKey, NewGame,
   PairingSummary,
-  Player
+  Player, ResultModel
 } from "../shared/game.model";
 import {Subject, Observable} from "rxjs";
 import cryptoRandomString from "crypto-random-string";
@@ -27,23 +27,17 @@ export class GamesService {
   currentGame = new Subject<CurrentGame>();
   returnToGameList = new Subject<boolean>();
 
-  constructor(private http: HttpClient,
-              private signal: SignalRService,
-              private storageService:LocalStorageService,
-              private sessionService:SessionStorageService) { }
+  constructor(private readonly http: HttpClient,
+              private readonly signal: SignalRService,
+              private readonly storageService:LocalStorageService,
+              private readonly sessionService:SessionStorageService) { }
 
   generate(length = 32): string {
     return cryptoRandomString({length: length});
   }
 
-  setPlayer(player: Player) {
-    if (player === null || player.Id === '') {
-      return;
-    }
-
-    this.http.post('/api/game/set-player/', player).subscribe(
-      () => {}
-    );
+  setPlayer(player: Player):Observable<ResultModel> {
+    return this.http.post<ResultModel>('/api/game/set-player/', player);
   }
 
   getGames() {

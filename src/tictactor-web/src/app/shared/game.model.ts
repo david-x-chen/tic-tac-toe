@@ -69,6 +69,11 @@ export interface BoardState {
   YourMove: boolean
 }
 
+export interface ResultModel {
+  message: string,
+  succeed: boolean
+}
+
 export class JoinGameResult {
   constructor(
     public gameState: number

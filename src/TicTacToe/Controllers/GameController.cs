@@ -8,13 +8,15 @@ public class GameController(
     IGameService gameService)
     : Controller
 {
+    private const string WrongPlayerIdMessage = "Wrong player id";
+
     [HttpGet("get-games")]
     public async Task<IActionResult> GetGames()
     {
         var guid = this.GetGuid();
         if (guid == Guid.Empty)
         {
-            return BadRequest("Wrong player id");
+            return BadRequest(WrongPlayerIdMessage);
         }
 
         return Json(await gameService.GetGames(guid));
@@ -26,7 +28,7 @@ public class GameController(
         var playerId = this.GetGuid();
         if (playerId == Guid.Empty)
         {
-            return BadRequest("Wrong player id");
+            return BadRequest(WrongPlayerIdMessage);
         }
 
         var player = grainFactory.GetGrain<IPlayerGrain>(playerId);
@@ -43,7 +45,7 @@ public class GameController(
         var playerId = this.GetGuid();
         if (playerId == Guid.Empty)
         {
-            return BadRequest("Wrong player id");
+            return BadRequest(WrongPlayerIdMessage);
         }
 
         var player = grainFactory.GetGrain<IPlayerGrain>(playerId);
@@ -60,7 +62,7 @@ public class GameController(
         var playerId = this.GetGuid();
         if (playerId == Guid.Empty)
         {
-            return BadRequest("Wrong player id");
+            return BadRequest(WrongPlayerIdMessage);
         }
 
         var moves = await gameService.GetMoves(playerId, id);
@@ -75,7 +77,7 @@ public class GameController(
         var playerId = this.GetGuid();
         if (playerId == Guid.Empty)
         {
-            return BadRequest("Wrong player id");
+            return BadRequest(WrongPlayerIdMessage);
         }
 
         var move = new GameMove { PlayerId = playerId, X = x, Y = y };
@@ -99,7 +101,11 @@ public class GameController(
         var playerId = this.GetGuid();
         if (playerId == Guid.Empty)
         {
-            return BadRequest("Wrong player id");
+            return BadRequest(Json(new
+            {
+                Message = WrongPlayerIdMessage,
+                Succeed = false
+            }));
         }
 
         var player = grainFactory.GetGrain<IPlayerGrain>(playerId);
@@ -107,6 +113,9 @@ public class GameController(
 
         await gameService.SyncGame(playerId);
 
-        return Json(new { });
+        return Json(new
+        {
+            Succeed = true
+        });
     }
 }
