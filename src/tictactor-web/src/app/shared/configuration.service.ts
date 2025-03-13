@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Configuration } from './configuration.model';
 import {Subject} from "rxjs";
 
@@ -11,7 +11,7 @@ export class ConfigurationService {
   configData = new Subject<Configuration>();
   private readonly configPath: string = './assets/config/config.json';
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
   }
 
   loadConfiguration() {

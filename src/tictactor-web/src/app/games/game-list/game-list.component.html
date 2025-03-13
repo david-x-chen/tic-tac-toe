@@ -1,72 +1,82 @@
-<div>
-  <h3>Your Games</h3>
-  <ul style="margin-bottom:25px">
-    <li *ngFor="let c of currentGames">
-      <h4>
-        {{ c.Name }}
-      </h4>
-      <div *ngIf="c.State === 0">
-        <strong>Waiting for another player</strong>
-        <br/>
-        <button type="button"
-                class="btn btn-outline-info"
-                (click)="showInvite(c.GameId, inviteContent)">
-          Invite a friend
-        </button>
-      </div>
-      <div *ngIf="c.State !== 0">
-        <button type="button"
-                (click)="play(c.GameId)"
-                class="btn btn-outline-success">
-          Play
-        </button>
-        <div *ngIf="c.YourMove">
+<div class=" mt-3">
+  <div class="buttons">
+    <button id="startNewBtn"
+            type="button"
+            class="btn btn-primary"
+            (click)="createGame()">
+      Start a new Game
+    </button>
+    <button id="joinBtn"
+            type="button"
+            class="btn btn-success"
+            (click)="showJoinDialog(joinGameContent)">
+      Join a Game
+    </button>
+  </div>
+
+  <div class="p-1">
+    <span class="has-text-weight-bold is-size-5 is-uppercase">Your Games</span>
+    <div class="grid mt-3">
+      <div class="cell" *ngFor="let c of currentGames">
+        <h4>
+          {{ c.Name }}
+        </h4>
+        <div *ngIf="c.State === 0">
+          <strong>Waiting for another player</strong>
+          <br/>
+          <button type="button"
+                  class="btn btn-outline-info"
+                  (click)="showInvite(c.GameId, inviteContent)">
+            Invite a friend
+          </button>
+        </div>
+        <div *ngIf="c.State !== 0">
+          <button type="button"
+                  (click)="play(c.GameId)"
+                  class="btn btn-outline-success">
+            Play
+          </button>
+          <div *ngIf="c.YourMove">
             <strong class="label text-warning">Your Move</strong>
-        </div>
-        <div>
-          Playing against <strong *ngFor="let u of c.Usernames">{{ u }}</strong><br/>
-          <strong>{{ c.NumMoves }}</strong> moves made
+          </div>
+          <div>
+            Playing against <strong *ngFor="let u of c.Usernames">{{ u }}</strong><br/>
+            <strong>{{ c.NumMoves }}</strong> moves made
+          </div>
         </div>
       </div>
+    </div>
+    <div class="columns">
+      <div class="column" *ngIf="currentGames.length === 0">
+        <i>No games available</i>
+      </div>
+    </div>
+  </div>
 
-    </li>
-    <li *ngIf="currentGames.length === 0">
-      <i>No games available</i>
-    </li>
+  <hr/>
 
-  </ul>
+  <div class="p-1">
+    <span class="has-text-weight-bold is-size-5 is-uppercase">Available Games</span>
+    <div class="grid mt-3">
+      <div class="cell" *ngFor="let a of availableGames">
+        <h4>
+          {{ a.Player.Name }}
+        </h4>
+        <strong>Waiting for another player</strong><br/>
+        <button class="btn btn-info"
+                type="button"
+                (click)="joinThisGame(a.GameId)">
+          Join
+        </button>
+      </div>
+    </div>
 
-  <h3>Available Games</h3>
-  <ul style="margin-bottom:25px">
-    <li *ngFor="let a of availableGames">
-      <h4>
-        {{ a.Player.Name }}
-      </h4>
-      <strong>Waiting for another player</strong><br/>
-      <button class="btn btn-info"
-              type="button"
-              (click)="joinThisGame(a.GameId)">
-        Join
-      </button>
-    </li>
-    <li *ngIf="availableGames.length === 0">
-      <i>No games available</i>
-    </li>
-
-  </ul>
-
-  <button id="startNewBtn"
-          type="button"
-          class="btn btn-primary"
-          (click)="createGame()">
-    Start a new Game
-  </button>
-  <button id="joinBtn"
-          type="button"
-          class="btn btn-success"
-          (click)="showJoinDialog(joinGameContent)">
-    Join a Game
-  </button>
+    <div class="columns">
+      <div class="column" *ngIf="availableGames.length === 0">
+        <i>No games available</i>
+      </div>
+    </div>
+  </div>
 </div>
 
 <ng-template #joinGameContent id="join-game-modal" let-modal>

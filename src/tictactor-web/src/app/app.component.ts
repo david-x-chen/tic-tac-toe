@@ -7,9 +7,10 @@ import {SignalRService} from "./shared/signal-r.service";
 import {ConfigurationService} from "./shared/configuration.service";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css',
+    standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
   versionSub!: Subscription;
@@ -18,9 +19,9 @@ export class AppComponent implements OnInit, OnDestroy {
   player : Player;
   onlinePlayers: number = 0;
 
-  constructor(private storageService:LocalStorageService,
-              private signal: SignalRService,
-              private config: ConfigurationService) {}
+  constructor(private readonly storageService:LocalStorageService,
+              private readonly signal: SignalRService,
+              private readonly config: ConfigurationService) {}
 
   ngOnInit() {
     this.config.loadConfiguration();

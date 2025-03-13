@@ -10,7 +10,7 @@ import {
 } from "../shared/game.model";
 import {Subject, Observable} from "rxjs";
 import cryptoRandomString from "crypto-random-string";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {LocalStorageService, SessionStorageService} from "ngx-webstorage";
 import {SignalRService} from "../shared/signal-r.service";
 
