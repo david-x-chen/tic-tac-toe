@@ -7,9 +7,10 @@ import {SignalRService} from "./shared/signal-r.service";
 import {ConfigurationService} from "./shared/configuration.service";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css',
+    standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
   versionSub!: Subscription;

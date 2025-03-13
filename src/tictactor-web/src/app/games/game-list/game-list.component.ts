@@ -15,9 +15,10 @@ import {SignalRService} from "../../shared/signal-r.service";
 import {SignalEventType} from "../../shared/signal-r.model";
 
 @Component({
-  selector: 'app-game-list',
-  templateUrl: './game-list.component.html',
-  styleUrl: './game-list.component.css'
+    selector: 'app-game-list',
+    templateUrl: './game-list.component.html',
+    styleUrl: './game-list.component.css',
+    standalone: false
 })
 export class GameListComponent implements OnInit, OnDestroy{
   gameSub!: Subscription;

@@ -4,9 +4,10 @@ import {CurrentGame, GameStorageKey} from "../shared/game.model";
 import {GamesService} from "./games.service";
 
 @Component({
-  selector: 'app-games',
-  templateUrl: './games.component.html',
-  styleUrl: './games.component.css'
+    selector: 'app-games',
+    templateUrl: './games.component.html',
+    styleUrl: './games.component.css',
+    standalone: false
 })
 export class GamesComponent implements OnInit, OnDestroy {
   currentGameSub!: Subscription;

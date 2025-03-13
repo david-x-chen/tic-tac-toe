@@ -16,9 +16,10 @@ interface BoardState {
 }
 
 @Component({
-  selector: 'app-game-board',
-  templateUrl: './game-board.component.html',
-  styleUrl: './game-board.component.css'
+    selector: 'app-game-board',
+    templateUrl: './game-board.component.html',
+    styleUrl: './game-board.component.css',
+    standalone: false
 })
 export class GameBoardComponent implements OnInit, OnDestroy {
   @Input() gameId: string;
