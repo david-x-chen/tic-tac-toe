@@ -13,15 +13,15 @@ import {ConfigurationService} from "./configuration.service";
   providedIn: 'root'
 })
 export class SignalRService extends SignalRBaseService {
-  private _signalEvent: Subject<SignalEvent<any>>;
+  private readonly _signalEvent: Subject<SignalEvent<any>>;
   private _openConnection: boolean = false;
   private _isInitializing: boolean = false;
   private _hubConnection!: HubConnection;
 
   private apiUrl: string | undefined;
 
-  constructor(private storageService:LocalStorageService,
-              private configService: ConfigurationService) {
+  constructor(private readonly storageService:LocalStorageService,
+              private readonly configService: ConfigurationService) {
     super();
 
     this._signalEvent = new Subject<any>();

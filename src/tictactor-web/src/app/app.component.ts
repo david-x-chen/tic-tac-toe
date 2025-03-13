@@ -19,9 +19,9 @@ export class AppComponent implements OnInit, OnDestroy {
   player : Player;
   onlinePlayers: number = 0;
 
-  constructor(private storageService:LocalStorageService,
-              private signal: SignalRService,
-              private config: ConfigurationService) {}
+  constructor(private readonly storageService:LocalStorageService,
+              private readonly signal: SignalRService,
+              private readonly config: ConfigurationService) {}
 
   ngOnInit() {
     this.config.loadConfiguration();

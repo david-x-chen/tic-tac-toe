@@ -1,19 +1,21 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {debounceTime, Subject, Subscription, tap} from "rxjs";
-import {GameMove, GameMoves, GameServerParameters, GameSummary, NameStorageKey, Player} from "../../shared/game.model";
+import {
+  BoardState,
+  GameMove,
+  GameMoves,
+  GameServerParameters,
+  GameSummary,
+  NameStorageKey,
+  Player
+} from "../../shared/game.model";
 import {SignalRService} from "../../shared/signal-r.service";
 import {SignalEventType} from "../../shared/signal-r.model";
 import {LocalStorageService} from "ngx-webstorage";
-import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {GamesService} from "../games.service";
-
-interface BoardState {
-  X: number,
-  Y: number,
-  State: string,
-  YourMove: boolean
-}
+import {faArrowAltCircleLeft, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faCircle} from "@fortawesome/free-regular-svg-icons";
 
 @Component({
     selector: 'app-game-board',
@@ -23,14 +25,23 @@ interface BoardState {
 })
 export class GameBoardComponent implements OnInit, OnDestroy {
   @Input() gameId: string;
-  private _message$ = new Subject<string>();
-  @ViewChild('selfClosingAlert', { static: false }) selfClosingAlert: NgbAlert;
+  private readonly msgSub = new Subject<string>();
+
+  showAlertMessage = false;
+
+  faArrowAltCircleLeft = faArrowAltCircleLeft;
+  faCircle = faCircle;
+  faXmark = faXmark;
+
+  board_rows = Array.from(Array(3),(x,i)=>i);
+  board_cols = Array.from(Array(3),(x,i)=>i);
 
   player: Player;
 
   alertType = 'warning';
   notYourMoveMessage = '';
   winMessage = '';
+  youWin = false;
 
   gameMoveSub!: Subscription;
   gameMovesSub!: Subscription;
@@ -39,16 +50,19 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   gameSummary: GameSummary = {} as GameSummary;
   board: { [id: string] : BoardState; } = {};
 
-  constructor(private signal: SignalRService,
-              private storageService: LocalStorageService,
-              private gamesService: GamesService) {
-    this._message$
+  constructor(private readonly signal: SignalRService,
+              private readonly storageService: LocalStorageService,
+              private readonly gamesService: GamesService) {
+    this.msgSub
       .pipe(
         takeUntilDestroyed(),
         tap((message) => (this.notYourMoveMessage = message)),
         debounceTime(5000),
       )
-      .subscribe(() => this.selfClosingAlert?.close());
+      .subscribe(() => {
+        this.showAlertMessage = !this.showAlertMessage;
+        this.notYourMoveMessage = '';
+      });
   }
 
   ngOnInit() {
@@ -94,27 +108,33 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.gameMoveSub = this.signal
       .getDataStream<GameMove>(SignalEventType.GAME_MOVE)
       .subscribe(message => {
-        console.log(message);
         const move = message.data;
         if (move.State == 2) {
           this.winMessage =
             move.PlayerId != this.player.Id
               ? `The winner: ${this.gameSummary.Usernames[0]}`
               : 'You win!';
+
+          this.youWin = move.PlayerId === this.player.Id;
         }
       });
+  }
+
+  setBoard(col: number, row: number) {
+    return `x${row}y${col}`;
   }
 
   move(state: BoardState) {
     if (state.State) {
       this.alertType = 'danger';
-      this._message$.next("Please act on the empty slot.");
+      this.msgSub.next("Please act on the empty slot.");
       return;
     }
 
     if (!state.YourMove) {
       this.alertType = 'warning';
-      this._message$.next("Not your move yet");
+      this.showAlertMessage = !this.showAlertMessage;
+      this.msgSub.next("Not your move yet");
       return;
     }
 
@@ -129,6 +149,10 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       }
     }
     this.signal.invokeServerMethod(params, SignalEventType.GAME_MOVE).then(() => {});
+  }
+
+  disableMove(state: BoardState) {
+    return state.State || this.winMessage;
   }
 
   showGames() {

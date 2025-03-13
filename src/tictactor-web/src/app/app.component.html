@@ -1,7 +1,8 @@
-﻿<div class="container">
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+﻿<div class="container is-widescreen">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary p-1" role="navigation" aria-label="main navigation">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Tic-Tac-Toe</a>
+      <a class="navbar-brand" href="#">
+        <span class="has-text-weight-bold is-size-4 is-uppercase">Tic-Tac-Toe</span></a>
       <small class="text-secondary-emphasis">{{ fileVersion }}</small>
       <button class="navbar-toggler" type="button"
               data-bs-toggle="collapse"
@@ -20,13 +21,10 @@
     </div>
   </nav>
 
-  <div class="container px-4">
-    <div class="row align-items-start">
-      <div class="col-12">
-        <app-home></app-home>
-      </div>
-    </div>
+  <div class="container is-desktop mt-1">
+    <app-home></app-home>
   </div>
+
   <footer class="py-5">
     <div class="row py-3 my-4 border-top">
       <div class="col-md-10 col-md-2 mb-3">

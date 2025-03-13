@@ -11,7 +11,7 @@ export class ConfigurationService {
   configData = new Subject<Configuration>();
   private readonly configPath: string = './assets/config/config.json';
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
   }
 
   loadConfiguration() {

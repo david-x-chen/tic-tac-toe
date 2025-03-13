@@ -1,0 +1,9 @@
+
+<button class="button has-background-info-light has-text-primary-00 is-fullwidth"
+        [disabled]="disableMove()"
+        (click)="buttonClicked()">
+
+    <fa-icon [icon]="board.State === 'O' ? faCircle : faXmark" *ngIf="board.State"></fa-icon>
+    <span *ngIf="!board.State">Your Move Here</span>
+
+</button>

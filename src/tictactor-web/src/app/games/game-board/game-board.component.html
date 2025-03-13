@@ -1,37 +1,44 @@
-<div>
-  <a style="margin-top:8px;margin-bottom:8px" (click)="showGames()">&larr;
-    Back to game list</a>
-  <h3>
-    {{ gameSummary.Name }}
-    <small *ngIf="gameSummary.YourMove"><label class="label text-warning">Your Move</label></small>
-  </h3>
-  <p>You are <strong>{{ gameSummary.GameStarter ? 'O' : 'X' }}</strong></p>
-  <p>Playing against <strong *ngFor="let userName of gameSummary.Usernames">{{ userName }}</strong></p>
-  <p><strong>{{ gameSummary.NumMoves }}</strong> moves made</p><br/>
-  <p *ngIf="winMessage"><strong class="text-success-emphasis text-success">{{ winMessage }}</strong></p>
-  <div class="p-3 m-0 border-0 css-grid m-0 border-0 css-grid-cssgrid">
-    <div class="grid text-center">
-      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x0y0'])">{{!board['x0y0'].State ? '' : board['x0y0'].State}}</div>
-      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x1y0'])">{{!board['x1y0'].State ? '' : board['x1y0'].State}}</div>
-      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x2y0'])">{{!board['x2y0'].State ? '' : board['x2y0'].State}}</div>
+<div class="is-align-content-center">
+  <a class="has-text-link" (click)="showGames()">
+    <fa-icon [icon]="faArrowAltCircleLeft"></fa-icon>
+    Back to game list
+  </a>
+  <div class="columns pt-3">
+    <div class="column">
+      <span class="has-text-weight-semibold">
+        {{ gameSummary.Name }}
+      </span>
+      <span class="has-text-warning is-size-6" *ngIf="gameSummary.YourMove">Your Move</span>
+    </div>
+    <div class="column">
+      <span>You are using
+        <fa-icon [icon]="gameSummary.GameStarter ? faCircle : faXmark"></fa-icon>
+      </span>
+    </div>
+    <div class="column">
+      <p><strong>{{ gameSummary.NumMoves }}</strong> moves made</p><br/>
     </div>
   </div>
-  <div class="p-3 m-0 border-0 css-grid m-0 border-0 css-grid-cssgrid">
-    <div class="grid text-center">
-      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x0y1'])">{{!board['x0y1'].State ? '' : board['x0y1'].State}}</div>
-      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x1y1'])">{{!board['x1y1'].State ? '' : board['x1y1'].State}}</div>
-      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x2y1'])">{{!board['x2y1'].State ? '' : board['x2y1'].State}}</div>
+  <div class="columns">
+    <div class="column">
+      <p>Playing against <strong *ngFor="let userName of gameSummary.Usernames">{{ userName }}</strong></p>
+    </div>
+    <div class="column">
+      <p *ngIf="winMessage">
+        <strong class="p-1 has-text-bold"
+                [class]="youWin ? 'has-text-primary-25 has-background-success-light' : 'has-text-warning-10 has-background-warning-light'">
+          {{ winMessage }}</strong>
+      </p>
     </div>
   </div>
-  <div class="p-3 m-0 border-0 css-grid m-0 border-0 css-grid-cssgrid">
-    <div class="grid text-center">
-      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x0y2'])">{{!board['x0y2'].State ? '' : board['x0y2'].State}}</div>
-      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x1y2'])">{{!board['x1y2'].State ? '' : board['x1y2'].State}}</div>
-      <div class="g-col-4" style="cursor: pointer" (click)="move(board['x2y2'])">{{!board['x2y2'].State ? '' : board['x2y2'].State}}</div>
+  <div class="has-text-centered">
+    <div class="columns is-vcentered" *ngFor="let c of board_cols">
+      <div class="column" *ngFor="let r of board_rows">
+        <app-mark-button [board]="board[setBoard(c, r)]" [completed]="winMessage !== ''"
+                         (moved)="move($event)"></app-mark-button>
+      </div>
     </div>
   </div>
 </div>
 
-@if (notYourMoveMessage) {
-  <ngb-alert #selfClosingAlert [type]="alertType" (closed)="notYourMoveMessage = ''">{{ notYourMoveMessage }}</ngb-alert>
-}
+<div class="notification is-warning mt-4" *ngIf="showAlertMessage">{{ notYourMoveMessage }}</div>
